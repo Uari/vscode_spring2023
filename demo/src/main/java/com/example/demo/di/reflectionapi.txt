@@ -1,0 +1,44 @@
+java.lang.reflection
+
+리플렉션은 언제 사용할까?
+:동적으로 클래스를 사용해야 할 때 사용한다 
+:작성 시점에는 어떤 클래스를 사용해야 할지 모르지만 런타임 시점에서 가져와 실행할 때 필요함 
+:스프링이나 개발도구(IDE)에서 동적바인딩을 지원하는 부분  
+
+:intellij 개발 도구 
+:Spring Framework
+
+컨트롤계층 - 
+@Controller - 페이지로 출력 
+@RestController - 문자열로 출력 , (text/plain, application:바이트/json) -> UI솔루션을 위해 제공 
+
+정적이란? - 컴파일이 된 것 
+동적이란? - 런타임시를 말함
+
+리플렉션에서 가져올 수 있는 정보 
+class 
+Constructor
+Method
+Field
+
+리플렉션은 실행 중에 객체생성, 메소드를 호출 
+자바도 지원하지 않나? - 동적이다라는 점이 다른다
+:변경에 유리하고 유연하게 처리하기 위해 
+
+Class duckClass = Duck.class;
+Logger logger = LoggerFactory.getLogger(Duck.class); Class객체 얻기 
+
+String getName() : 클래스의 이름을 리턴한다.
+Package getPackage() : 클래스의 패키지 정보를 패키지 클래스 타입으로 리턴한다.
+Field[] getFields() : public으로 선언된 변수 목록을 Field 클래스 배열 타입으로 리턴한다.
+Field getField(String name) : public으로 선언된 변수를 Field 클래스 타입으로 리턴한다.
+Field[] getDeclaredFields() : 해당 클래스에서 정의된 변수 목록을 field 클래스 배열 타입으로 리턴한다.
+Field getDeclaredField(String name) : name과 동일한 이름으로 정의된 변수를 Field 클래스 타입으로 리턴한다.
+Method[] getMethods() : public으로 선언된 모든 메소드 목록을 Method 클래스 배열 타입으로 리턴한다. 해당 클래스에서 사용 가능한 상속받은 메소드도 포함된다.
+Method getMethod(String name, Class... parameterTypes) : 지정된 이름과 매개변수 타입을 갖는 메소드를 Method 클래스 타입으로 리턴한다.
+Method[] getDeclaredMethods() : 해당 클래스에서 선언된 모든 메소드 정보를 리턴한다.
+Method getDeclaredMethod(String name, Class... parameterTypes) : 지정된 이름과 매개변수 타입을 갖는 해당 클래스에서 선언된 메소드를 Method 클래스 타입으로 리턴한다.
+Constructor[] getConstructors() : 해당 클래스에 선언된 모든 public 생성자의 정보를 Constructor 배열 타입으로 리턴한다.
+Constructor[] getDeclaredConstructors() : 해당 클래스에서 선언된 모든 생성자의 정보를 Constructor 배열 타입으로 리턴한다.
+int getModifiers() : 해당 클래스의 접근자(modifier) 정보를 int 타입으로 리턴한다.
+String toString() : 해당 클래스 객체를 문자열로 리턴한다.
