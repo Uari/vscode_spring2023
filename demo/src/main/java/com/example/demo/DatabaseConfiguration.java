@@ -17,18 +17,18 @@ import org.springframework.context.annotation.PropertySource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-@Configuration
-//@PropertySource("classpath:/application.properties")
+@Configuration // Bean을 등록할 수 있다
+// @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/application.yml")
-//@MapperScan(basePackages = "com.example.demo.mapper")
-public class DatabaseConfiguration {  //NullPointException -> BeanCreationException
+// @MapperScan(basePackages = "com.example.demo.mapper")
+public class DatabaseConfiguration { // NullPointException -> BeanCreationException
 	private static final Logger logger = LogManager.getLogger(DatabaseConfiguration.class);
-	
-  //Bean이 있는 메소드는 byName, byType호출이 가능함 
-  @Bean
+
+	// Bean이 있는 메소드는 byName, byType호출이 가능함
+	@Bean
 	@ConfigurationProperties(prefix = "spring.datasource.hikari")
 	public HikariConfig hikariConfig() {
-		return new HikariConfig();
+		return new HikariConfig(); // 셍상지 호출 - 상위 클래스 생성자도 먼저 호출된다
 	}
 
 	@Bean
@@ -37,14 +37,17 @@ public class DatabaseConfiguration {  //NullPointException -> BeanCreationExcept
 		logger.info("datasource : {}", dataSource);
 		return dataSource;
 	}
-	@Autowired //그물을 엮는다 - 의존성 주입과 관련된 어노테이션 
+
+	@Autowired // 그물을 엮는다 - 의존성 주입과 관련된 어노테이션
 	private ApplicationContext applicationContext;
+	//resources에 대한 접근, 
 
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-		//classpath는 src/main/resourcs이고 해당 쿼리가 있는 xml 위치는 본인의 취향대로 위치키시고 그에 맞도록 설정해주면 된다.
+		// classpath는 src/main/resourcs이고 해당 쿼리가 있는 xml 위치는 본인의 취향대로 위치키시고 그에 맞도록 설정해주면
+		// 된다.
 		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
 		return sqlSessionFactoryBean.getObject();
 	}
@@ -52,5 +55,5 @@ public class DatabaseConfiguration {  //NullPointException -> BeanCreationExcept
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
-	}	
+	}
 }
