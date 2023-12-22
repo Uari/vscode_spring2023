@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -75,3 +76,7 @@
     <!--================================================================  -->
   </body>
 </html>
+=======
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%> spring boot start!!
+asdjnfbkajsnfsajdnksadlknfsdaf
+>>>>>>> 158489854ba282b43197f87a2e0ceb07ca4868de
