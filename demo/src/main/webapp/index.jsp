@@ -1,5 +1,10 @@
-<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%
+  //String s_nickname = (String)session.getAttribute("nickname");
+  //로그인을 하지 않았다면 null이 출력됨
+  //out.print(s_nickname);
+%>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -76,7 +81,3 @@
     <!--================================================================  -->
   </body>
 </html>
-=======
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%> spring boot start!!
-asdjnfbkajsnfsajdnksadlknfsdaf
->>>>>>> 158489854ba282b43197f87a2e0ceb07ca4868de

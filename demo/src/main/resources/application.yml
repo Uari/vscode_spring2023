@@ -30,4 +30,5 @@ spring:
       pool-name: oraPool
   servlet:
     multipart:
+      max-file-size: 10MB
       enabled: true

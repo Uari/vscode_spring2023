@@ -8,6 +8,7 @@
 		insert into  notice(n_no,  n_title, n_content, n_writer)
 		values(seq_notice_no.nextval, #{n_title}, #{n_content}, #{n_writer})
 	</insert>
+
 	<update id="noticeUpdate" parameterType="map">
 		update notice
               set n_title = #{n_title}
@@ -15,9 +16,14 @@
               ,  n_writer = #{n_writer}
       where n_no = #{n_no}
 	</update>
+
 	<delete id="noticeDelete" parameterType="map">
 		delete from notice where n_no = #{n_no}  	
 	</delete>
+<!-- 
+	myBatis는 동적쿼리를 지원 - 조건에 따라 다르게 SQL문 동작가능 
+	현재게시글이 한건만 존재하는 경우에는 배제되어야 한다. - 트랜젝션 처리가 필요한 순간 
+-->
 	<select id="noticeList" parameterType="map"  resultType = "map">
 		select n_no, n_title, n_content, n_writer from notice
 		<where>

@@ -37,6 +37,8 @@ dependencies {
   annotationProcessor 'org.projectlombok:lombok'
   providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'jakarta.el:jakarta.el-api:5.0.1'
+	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
 }
 
 tasks.named('bootBuildImage') {

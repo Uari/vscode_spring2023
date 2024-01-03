@@ -1,5 +1,6 @@
 package com.example.demo.kakao;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+import com.vo.KakaoProfile;
 import com.vo.OAuthToken;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/auth/*")
@@ -24,7 +28,7 @@ public class kakaoController2 {
 
   // @ResponsBody를 붙이면 Data를 리턴해준느 컨트롤러 메소드가 된다
   @GetMapping("/kakao/callback")
-  public @ResponseBody String kakaoCallback(String code) {
+  public String kakaoCallback(String code, HttpSession session) {
     logger.info("kakaoCallback");
     // HttpHeaders : 해더값에 클라이언트의 요청이나 서버의 응답에 포함되어 부가적인 정보를 담고 있음
     HttpHeaders headers = new HttpHeaders();
@@ -60,8 +64,19 @@ public class kakaoController2 {
         profileRequest,
         String.class);
 
-    return response2.getBody();
+    Gson g2 = new Gson();
+    KakaoProfile kkp = g2.fromJson(response2.getBody(), KakaoProfile.class);
+    logger.info("카카오 아이디(번호) : " + kkp.getId());
+    logger.info("카카오 이메일 : " + kkp.getKakao_account().getEmail());
+    logger.info("카카오 유저네임 : " + kkp.getProperties().getNickname());
+    session.setAttribute("nickname", kkp.getProperties().getNickname());
+    return "redirect:/index.jsp";
 
     // return oat.getAccess_token();
+  }
+  @GetMapping("logout")
+  public String logout(HttpSession session){
+    session.invalidate();
+    return "redirect:/index.jsp";
   }
 }

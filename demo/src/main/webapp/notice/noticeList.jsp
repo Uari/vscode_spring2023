@@ -1,20 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.*, com.util.BSPageBar" %>
 <%
-//noticeList_jsp.java -> noticeList_jsp.class
-	//서블릿(FrontMVC)을 경유[NoticeController-> NoticeLogic]하고 
-	//select한 결과를 돌려(List<Map>) 받아서 request객체에 담아 두었다
-	//                                                    req.setAttribute("xList", nList);
 	int size = 0;//전체 레코드 수
 	List<Map<String,Object>> nList = (List)request.getAttribute("nList");
 	if(nList !=null){
 		size = nList.size();
 	}
-	out.print(size);
-	//테스트 링크
-	//http://localhost:8000/notice/noticeList.gd - FrontMVC경유하는 경우
-	//http://localhost:8000/notice/noticeList.jsp - FrontMVC경유하지 않는다.
+	//out.print(size);
+
+	int numPerPage = 3;
+	int nowPage = 0;
+		if(request.getParameter("nowPage")!=null){
+			nowPage = Integer.parseInt(request.getParameter("nowPage"));
+		} 
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -28,7 +27,9 @@ pageEncoding="UTF-8"%>
     <script type="text/javascript">
     	function searchEnter(){
     		console.log('searchEnter')
-  
+				if(window.event.keyCode==13){
+					noticeSearch();
+				}
     	}
 		
 		function noticeSearch(){
@@ -36,13 +37,19 @@ pageEncoding="UTF-8"%>
 			const gubun = document.querySelector("#gubun").value;
 			const keyword = document.querySelector("#keyword").value;
 			console.log(`${gubun} , ${keyword}`);
-			location.href="/notice/noticeList.gd?gubun="+gubun+"&keyword="+keyword;
+			location.href="/notice/noticeList?gubun="+gubun+"&keyword="+keyword;
+			// document.querySelector('#gubun').value = '분류선택';
+    	// document.querySelector('#keyword').value = '';
 		}
 
 		const noticeInsert = () =>{
 			document.querySelector("#f_notice").submit();
 		}
-    
+
+		const noticeDetail = (n_no) =>{
+			//console.log(n_no);
+			location.href="/notice/noticeDetail?n_no="+n_no;
+		}
     </script>
   </head>
   <body>
@@ -91,12 +98,15 @@ pageEncoding="UTF-8"%>
 	//n건을 조회하는 경우이지만 resultType에는 map이나 vo패턴을 주는게 맞다
 	//주의사항 - 자동으로 키값을 생성함 - 디폴트가 대문자이다
 	//myBatis연동시 resultType=map{한행}으로 줌 -> selectList("noticeList", pMap)
-	for(int i=0;i<size;i++){
+	for(int i=nowPage*numPerPage;i<nowPage*numPerPage+numPerPage; i++){
+		if(i == size) break;
 		Map<String,Object> rmap = nList.get(i);
 %>					
 					<tr>
 						<td><%=rmap.get("N_NO") %></td>
-						<td><%=rmap.get("N_TITLE") %></td>
+						<td>
+							<a href="javascript:noticeDetail('<%=rmap.get("N_NO") %>')"><%=rmap.get("N_TITLE") %></a>
+						</td>
 						<td><%=rmap.get("N_WRITER") %></td>
 					</tr>					
 <%
@@ -107,12 +117,18 @@ pageEncoding="UTF-8"%>
     
 <!-- [[ 페이징 처리  구간  ]] -->
 			<div style="display:flex; justify-content:center;">
-				<ul class="pagination">[1] [2] [3]</ul>
+				<ul class="pagination">
+					<%
+						String pagePath = "noticeList";
+						BSPageBar bspb = new BSPageBar(numPerPage, size, nowPage, pagePath);
+						out.print(bspb.getPageBar());
+					%>
+				</ul>
 			</div>
 <!-- [[ 페이징 처리  구간  ]] -->		
 	  
 		  	<div class='notice-footer'>
-		    	<button class="btn btn-warning" onclick="noticeList()">
+		    	<button class="btn btn-warning" onclick="noticeSearch()">
 		      		전체조회
 		    	</button>&nbsp; 
 			    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#noticeForm">
